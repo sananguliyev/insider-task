@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="header clearfix">
+    <nav>
+      <ul class="nav nav-pills pull-right">
+        <li role="presentation" class="active"><%= link_to "Ana Sayfa", root_path %></li>
+        <!--li role="presentation"><a href="#">Oyunlar</a></li>
+        <li role="presentation"><a href="#">Oyun ekle</a></li-->
+      </ul>
+    </nav>
+    <h3 class="text-muted">Insider Task</h3>
+  </div>
+
+  <div class="jumbotron">
+    <h1>Süper Lig</h1>
+    <p class="lead">Haftalara göre lig sıralamasını ve şampiyonluk ihtimalini öğrenmek için aşağıdaki haftalardan birine basınız, ama unutmayın ki, haftalar değil yıllarda geçse gönüllerin şampiyon her zaman Beşiktaş ;)</p>
+    <p>
+      <% for i in 1..@tours.week %>
+      <%= link_to i, week_path(i), role: "button", class: "btn btn-lg btn-success" %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="row marketing">
+    <h1><%= params[:week] ? params[:week] : @tours.week %>. hafta puan durum <%= Statistics::League.prediction(13) %></h1>
+    <table class="table table-hover">
+      <thead>
+      <th>#</th>
+      <th>Takım</th>
+      <th>O</th>
+      <th>G</th>
+      <th>B</th>
+      <th>M</th>
+      <th>AG</th>
+      <th>YG</th>
+      <th>A</th>
+      <th>P</th>
+      </thead>
+      <tbody>
+      <% @teams.each do |team| %>
+          <tr>
+            <td><%= @teams.index(team) + 1 %></td>
+            <td><%= team.title %></td>
+            <td><%= team.stats(params[:week])['matches'] %></td>
+            <td><%= team.stats(params[:week])['win'] %></td>
+            <td><%= team.stats(params[:week])['draw'] %></td>
+            <td><%= team.stats(params[:week])['lost'] %></td>
+            <td><%= team.stats(params[:week])['goal_forward'] %></td>
+            <td><%= team.stats(params[:week])['goal_against'] %></td>
+            <td><%= team.stats(params[:week])['average'] %></td>
+            <td><%= team.stats(params[:week])['points'] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <h1><%= params[:week] ? params[:week] : @tours.week %>. hafta fikstürü</h1>
+    <table class="table table-hover">
+      <thead>
+          <th class="col-md-5">Ev sahibi</th>
+          <th>#</th>
+          <th>#</th>
+          <th class="text-right col-md-5">Konuk takım</th>
+      </thead>
+      <tbody>
+      <% @matches.each do |match| %>
+          <tr>
+            <td><%= match.team1.title %></td>
+            <td><%= match.team1_score %></td>
+            <td><%= match.team2_score %></td>
+            <td class="text-right"><%= match.team2.title %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; Insider 2015</p>
+  </footer>
+
+</div> <!-- /container -->
